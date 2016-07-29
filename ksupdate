@@ -1,0 +1,31 @@
+#!/bin/sh
+# install/update java key store with certficate
+
+KEYSTORE=bidkeystore.jks
+help() {
+	echo "ksimport - import a certificate into a keystore"
+	echo "Usage:"
+	echo "   ksupdate alias certificate [keystore]"
+}
+keytoolexe=$(which keytool)
+if [ ! -x "$keytoolexe" ] ; then
+   echo "KeyTool not found. Please ensure your JAVA_HOME is in PATH"
+fi
+if [ -z "$1" ]; then
+	help
+	exit 1
+fi
+if [ -z "$2" ]; then
+	help
+	exit 1
+fi
+if [ -n "$3" ]; then
+	KEYSTORE=$3
+fi
+$keytoolexe -delete -alias root -keystore $KEYSTORE
+$keytoolexe -delete -alias intermediate -keystore $KEYSTORE
+$keytoolexe -delete -alias $1 -keystore $KEYSTORE
+$keytoolexe -import -trustcacerts -alias root -file ./certs/1_root.crt -keystore $KEYSTORE
+$keytoolexe -import -trustcacerts -alias intermediate -file ./certs/2_Intermediate.crt -keystore $KEYSTORE 
+$keytoolexe -import -trustcacerts -alias $1 -file $2 -keystore $KEYSTORE
+

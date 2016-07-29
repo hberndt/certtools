@@ -1,0 +1,47 @@
+# This definition stops the following lines choking if HOME isn't
+# defined.
+HOME                    = .
+RANDFILE                = $ENV::HOME/.rnd
+
+####################################################################
+[ req ]
+default_bits            = 2048
+default_keyfile         = newcert.key
+attributes              = req_attributes
+distinguished_name      = req_distinguished_name
+
+string_mask             = utf8only
+
+req_extensions          = v3_req # The extensions to add to a certificate request
+
+[ req_attributes ]
+challengePassword       = Kein Passwort vergeben - einfach mit ENTER weiter!
+challengePassword_min   = 0
+challengePassword_max   = 20
+
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+countryName_default             = DE
+
+0.organizationName              = Organization Name (eg, company)
+0.organizationName_default      = BiDcore GmbH
+
+commonName                      = Common Name (e.g. server name)
+commonName_default              = server.bidcore.de
+
+[ v3_req ]
+
+# Extensions to add to a certificate request
+
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+# Some CAs do not yet support subjectAltName in CSRs.
+# Instead the additional names are form entries on web
+# pages where one requests the certificate...
+subjectAltName          = @alt_names
+
+[alt_names]
+DNS.1                   = server2.bidcore.de
+DNS.2                   = server3.bidcore.de
+

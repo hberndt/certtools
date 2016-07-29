@@ -1,0 +1,37 @@
+#!/bin/sh
+# install/update java key store with certficate
+
+if [ -n "$1" ]; then
+	JHOME=$1
+else
+	JHOME=$JAVA_HOME
+fi
+echo "Using $JHOME as JAVA_HOME"
+
+keytoolexe=$(which keytool)
+if [ ! -x "$keytoolexe" ] ; then
+   echo "KeyTool not found. Please ensure your JAVA_HOME is in PATH"
+fi
+
+wget https://www.startssl.com/certs/ca.crt
+wget https://www.startssl.com/certs/sca.server1.crt
+wget https://www.startssl.com/certs/sca.server2.crt
+wget https://www.startssl.com/certs/sca.server3.crt
+wget https://www.startssl.com/certs/sca.server4.crt
+
+CACERTS=$JAVA_HOME/jre/lib/security/cacerts
+
+sudo keytool -delete -alias startcom.ca -keystore $CACERTS -storepass changeit
+sudo keytool -delete -alias startcom.subclass1 -keystore $CACERTS -storepass changeit
+sudo keytool -delete -alias startcom.subclass2 -keystore $CACERTS -storepass changeit
+sudo keytool -delete -alias startcom.subclass3 -keystore $CACERTS -storepass changeit
+sudo keytool -delete -alias startcom.subclass4 -keystore $CACERTS -storepass changeit
+
+sudo keytool -import -trustcacerts -keystore $CACERTS -storepass changeit -alias startcom.ca -file ca.crt
+sudo keytool -import -keystore $CACERTS -storepass changeit -alias startcom.subclass1 -file sca.server1.crt
+sudo keytool -import -keystore $CACERTS -storepass changeit -alias startcom.subclass2 -file sca.server2.crt
+sudo keytool -import -keystore $CACERTS -storepass changeit -alias startcom.subclass3 -file sca.server3.crt
+sudo keytool -import -keystore $CACERTS -storepass changeit -alias startcom.subclass4 -file sca.server4.crt
+
+rm -f ca.crt
+rm -f sca.server*.crt

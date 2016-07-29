@@ -1,0 +1,11 @@
+#!/bin/sh
+# installs the certificates in /etc/ssl
+
+echo "Install all certifcates in /etc/ssl/certs"
+
+for certfile in ./certs/* ; do
+	cp certfile /etc/ssl/certs
+done
+
+service nginx restart
+

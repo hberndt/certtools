@@ -1,0 +1,14 @@
+#!/bin/sh
+# retrieve a certificate from an existing site
+
+if [ -z "$1" ]; then
+	echo "You have to specify an URL"
+	exit 1
+fi
+if [ -z "$2" ]; then
+	echo "You have to specify a filename"
+	exit 1
+fi
+openssl s_client -connect $1:443 < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $2.crt
+
+echo "Certificate retrieved and stored in $2.crt

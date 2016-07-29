@@ -1,0 +1,6 @@
+#!/bin/sh
+# creates a new certification request based on the newcert.cnf
+openssl req -new -config newcert.cnf -out $1.csr
+
+openssl rsa -in newcert.key -out $1.key
+mv newcert.key $1.crypt.key

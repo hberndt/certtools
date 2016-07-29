@@ -1,0 +1,12 @@
+#!/bin/sh
+# shows all certificates in clear text 
+# if you use a parameter use the name 
+
+if [ -z "$1" ]; then
+	for certfile in ./certs/* ; do
+		echo $certfile
+		openssl x509 -in $certfile -text -noout
+	done
+else
+	openssl x509 -in $1 -text -noout
+fi 
