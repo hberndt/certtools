@@ -21,6 +21,6 @@ fi
 if [ -n "$3" ]; then
 	KEYSTORE=$3
 fi
-keytool -import -alias $1 -keystore $3 -file $3 
+keytool -importcert -alias $1 -keystore $3 -file $3 
 
 
